@@ -1,0 +1,75 @@
+sc_reset_apl_conf("app_form_add_users");
+sc_reset_apl_conf("app_retrieve_pswd");
+
+$doesExist = "SELECT count(status) from barCodeGenStatus";
+sc_lookup(de,$doesExist);
+if({de[0][0]} == 0){
+	$insertQuery = "insert into barCodeGenStatus(status) VALUES(1)";
+	sc_exec_sql($insertQuery);
+	
+	 $perms = array("AAAAB","AAABB","AABBB","ABBBB","ABBBC","ABBCC","ABCCC","ABBCC","ACCCC","ACCCD","ACCDD","ACDDD","ADDDD");
+        $unique = array();
+        $finalPermutation = array();
+        for($pams = 0; $pams < count($perms); $pams++){
+            $start = $perms[$pams];
+            $total = 0;
+            for($x = 0; $x < strlen($start);$x++){
+                if (array_key_exists($start[$x], $unique)) {
+                    $unique[$start[$x]] = $unique[$start[$x]] + 1;
+                    $total += 1;
+                }
+                else{
+                    $unique[$start[$x]] = 1;
+                    $total += 1;
+                }
+            }
+            $numerator = 1;
+            for($x = $total; $x >= 1; $x-- ){
+                $numerator *= $x;
+            }
+        
+            $denominator = 1;
+            foreach($unique as $key => $val){
+                for($x = $val; $x >= 1; $x--){
+                    $denominator *= $x;
+                }
+            }
+            $totalPermutation = $numerator / $denominator;
+            //$individ = explode("",$start);
+            $pointer = strlen($start) - 1;
+            
+            if(!in_array($start,$finalPermutation)){
+                    array_push($finalPermutation, $start);
+                }
+            for($x = 0; $x < $totalPermutation; $x++){
+                $tmp = $start[$pointer];
+                
+                $tmp2 = $start[$pointer - 1];
+                $start[$pointer] = $tmp2;
+                $start[$pointer - 1] = $tmp;
+                if(!in_array($start,$finalPermutation)){
+                    array_push($finalPermutation, $start);
+                }
+               // echo "$start<br />";
+          
+            
+                if($x == strlen($start)-1){
+                    //System.out.print(count);
+                    break;
+                }else{
+                   // System.out.print(count);
+                $pointer = $pointer-1;
+                }
+
+            
+            }
+        }
+        //$countIt = 1;
+        foreach($finalPermutation as $sd){
+           $qExec = "INSERT INTO catPostfix(postFixTag,isUsed) values('$sd',0)";
+			sc_exec_sql($qExec);
+           // $countIt++;
+        }
+}
+
+

@@ -1,0 +1,98 @@
+///Resudal vAlue Event 
+
+$assetCost = {AssetCost};
+$lifeSpan = {AssetUsagePeriod};
+$salvageVal = {ResidualValue};
+if($assetCost < $salvageVal){
+	sc_error_message("Sorry The Asset Cost ($assetCost) cannot be less than the Salvage Value ($salvageVal)");
+}
+else{
+	$annualDepreciation = ($assetCost - $salvageVal) / $lifeSpan;
+	$monthlyDepreciation = $annualDepreciation/12;
+	
+	[totalMonthsToDepreciate] = $lifeSpan * 12;//floor($assetCost/$monthlyDepreciation);
+	
+	{AssetMonthlyDepreciation} = $monthlyDepreciation;
+	{AssetBookValue} = $assetCost;
+}
+
+
+
+/// Asset Category ON Change Event
+
+$categoryId = {AssetCategory};
+$postFix = "select postFixTag from catPostfix where id = (select categoryTag from AssetCategory where CatId = $categoryId)";
+sc_lookup(fix,$postFix);
+
+$pFix = {fix[0][0]};
+$recCount = "select barcode from Assets where barcode like '%".{fix[0][0]}."' order by id desc limit 1";
+sc_alert($recCount);
+sc_lookup(countRecord,$recCount);
+$res = {countRecord[0][0]};
+
+{barcode} = $res;
+
+
+/*
+
+
+
+
+//$pFix = "";
+
+
+sc_lookup(fix,$postFix);
+
+$pFix = {fix[0][0]};
+
+sc_lookup(lot,"select postFixTag from catPostfix where id = (select categoryTag from AssetCategory where CatId = $categoryId)");
+
+$recCount = "select count(barcode) from Assets where barcode like '%{fix[0][0]}' order by id desc limit 1";
+$gmb = {lot[0][0]};
+sc_lookup(xy,"select count(barcode) from Assets where barcode like '%$pFix'");
+
+
+sc_lookup(k,"select count(barcode) from Assets where barcode like '%$gmb' order by id desc limit 1");
+
+$xyz = {xy[0][0]};
+$tmp = "";
+// sc_alert($pFix." : ".$gmb." : ".{k[0][0]});
+
+
+if( $xyz != 0 ){
+	
+$selLastType = "select barcode from Assets where barcode like '%$pFix' order by id desc limit 1";
+$lastRec = sc_lookup(slt,$selLastType);
+
+	$dataFetched = {slt[0][0]};
+        $len = strlen($dataFetched);
+        $sbstr = substr($dataFetched,1,4);
+        $sbstr = $sbstr+1;
+		
+        $length = strlen($sbstr);
+		
+        if($length == 1){
+                $tmp = "A000".$sbstr.$pFix;
+        }
+        else if($length ==2){
+                $tmp = "A00".$sbstr.$pFix;
+        }
+        else if($length == 3){
+                $tmp = "A0".$sbstr.$pFix;
+        }
+        else{
+                $tmp = "A".$sbstr.$pFix;
+        }
+
+	}
+	///if(false){}
+else{
+	$tmp = "A0001".$pFix;
+
+
+}
+
+{barcode} = $tmp;
+
+
+*/

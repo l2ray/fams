@@ -1,0 +1,48 @@
+.containers{
+    padding-top:55px;
+    font-weight: bold;
+    
+}
+
+#wrapper{
+    display:flex;
+    /* justify-content: flex-end; */
+    border-radius:25px;
+    opacity:0.9;
+    background-color:white;
+    margin-top:10%;
+    width:50%;
+    padding-top:20px;
+    padding-bottom:20px;
+   
+}
+#loginIcon{
+     width:75%;
+}
+#loginBackground{
+    background-image: url("../images/assets.jpg") ;
+}
+#image{
+ 
+   
+}
+.centerIt{
+    background-color:orange;
+    opacity: 0.9;
+    margin:0 auto;
+    width:1000px;
+    padding:60px;
+    margin-top:100px;
+    border-top-right-radius: 100px;
+    border-bottom-left-radius: 100px;
+}
+.centerText{
+    text-align:center;
+    color:blue;
+}
+.tableCenter{
+    background-color:white;
+    opacity:0.9;
+    margin-top:30px;
+    padding:10px;
+}
